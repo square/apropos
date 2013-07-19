@@ -79,3 +79,5 @@ There are many tools and techniques for using responsive images. What makes Apro
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+© 2013 Square, Inc.
