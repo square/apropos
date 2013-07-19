@@ -142,6 +142,15 @@ describe Apropos do
       ]
     end
 
+    it "sorts breakpoints within retina rules" do
+      stub_files("/foo.2x.large.jpg", "/foo.2x.medium.jpg", "/foo.2x.jpg")
+      rules.should == [
+        ["media", "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)", "/foo.2x.jpg"],
+        ["media", "(-webkit-min-device-pixel-ratio: 2) and (min-width: 768px), (min-resolution: 192dpi) and (min-width: 768px)", "/foo.2x.medium.jpg"],
+        ["media", "(-webkit-min-device-pixel-ratio: 2) and (min-width: 1024px), (min-resolution: 192dpi) and (min-width: 1024px)", "/foo.2x.large.jpg"]
+      ]
+    end
+
     it "sorts locale rules: country < lang < locale" do
       stub_files("/foo.fr.jpg", "/foo.fr-ca.jpg", "/foo.ca.jpg")
       rules.should == [

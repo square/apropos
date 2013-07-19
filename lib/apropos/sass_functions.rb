@@ -32,8 +32,8 @@ module Apropos
       ::Sass::Script::Bool.new(false)
     end
 
-    def add_breakpoint_image_variant(id, query)
-      ::Apropos.add_breakpoint_image_variant(id.value, query.value)
+    def add_breakpoint_image_variant(id, query, sort)
+      ::Apropos.add_breakpoint_image_variant(id.value, query.value, sort.value)
       ::Sass::Script::Bool.new(false)
     end
 

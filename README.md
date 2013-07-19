@@ -31,8 +31,10 @@ You can configure what variants will be recognized in your project. There are he
     large_query = '(min-width: 1024px)'
 
     Apropos.add_dpi_image_variant('2x', dpi_query)
-    Apropos.add_breakpoint_image_variant('medium', medium_query)
-    Apropos.add_breakpoint_image_variant('large', large_query)
+    # Last argument is a sort value so that "medium" rules are output before
+    # "large" ones.
+    Apropos.add_breakpoint_image_variant('medium', medium_query, 1)
+    Apropos.add_breakpoint_image_variant('large', large_query, 2)
 
 ### Use Apropos in Sass
 
