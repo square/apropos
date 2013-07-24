@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Apropos::VERSION
   spec.authors       = ["Gabriel Gilder"]
   spec.email         = ["gabriel@squareup.com"]
-  spec.description   = %q{Apropos simplifies and automates the task of using multiple versions of an image in responsive and/or localized web sites. Instead of manually writing a lot of CSS rules to swap different images, Apropos generates CSS for you based on a simple file naming convention.}
-  spec.summary       = %q{Apropos simplifies and automates the task of using multiple versions of an image in responsive and/or localized web sites.}
+  spec.description   = %q{Apropos helps your site serve up the appropriate image for every visitor. Serving multiple versions of an image in responsive and/or localized web sites can be a chore, but Apropos simplifies and automates this task. Instead of manually writing a lot of CSS rules to swap different images, Apropos generates CSS for you based on a simple file naming convention.}
+  spec.summary       = %q{Apropos helps your site serve up the appropriate image for every visitor.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
