@@ -2,16 +2,15 @@ require 'compass'
 
 module Apropos
   SEPARATOR = '.'
+  STYLESHEETS_DIR = File.expand_path('../../stylesheets', __FILE__)
 end
 
-here = File.dirname(__FILE__)
-Dir.glob(File.join(here, 'apropos', '*.rb'), &method(:require))
+Dir.glob(File.expand_path('../apropos/*.rb', __FILE__), &method(:require))
 
 module Sass::Script::Functions
   include Apropos::SassFunctions
 end
 
-stylesheets_directory = File.expand_path(File.join(here, '..', 'stylesheets'))
 Compass::Frameworks.register('apropos', {
-  :stylesheets_directory => stylesheets_directory
+  :stylesheets_directory => Apropos::STYLESHEETS_DIR
 })
