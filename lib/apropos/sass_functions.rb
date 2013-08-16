@@ -21,19 +21,25 @@ module Apropos
       end
     end
 
+    def self.value(val)
+      val.respond_to?(:value) ? val.value : val
+    end
+
     def image_variants(path)
       assert_type path, :String
       out = ::Apropos.image_variant_rules(path.value)
       ::Apropos.convert_to_sass_value(out)
     end
 
-    def add_dpi_image_variant(id, query)
-      ::Apropos.add_dpi_image_variant(id.value, query.value)
+    def add_dpi_image_variant(id, query, sort=0)
+      sort = ::Apropos::SassFunctions.value(sort)
+      ::Apropos.add_dpi_image_variant(id.value, query.value, sort)
       ::Sass::Script::Bool.new(false)
     end
 
-    def add_breakpoint_image_variant(id, query, sort)
-      ::Apropos.add_breakpoint_image_variant(id.value, query.value, sort.value)
+    def add_breakpoint_image_variant(id, query, sort=0)
+      sort = ::Apropos::SassFunctions.value(sort)
+      ::Apropos.add_breakpoint_image_variant(id.value, query.value, sort)
       ::Sass::Script::Bool.new(false)
     end
 
