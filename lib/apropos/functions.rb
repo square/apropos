@@ -1,0 +1,68 @@
+# The Apropos module provides several functions for configuration and for
+# supplying rules to the Sass functions. See the README for configuration
+# examples.
+#
+# It also provides convenience functions used by the Sass functions.
+module Apropos
+  module_function
+
+  def image_variant_rules(path)
+    set = Set.new(path, images_dir)
+    set.variants.select(&:valid?).map do |variant|
+      variant.rule
+    end
+  end
+
+  def add_dpi_image_variant(id, query, order=0)
+    ExtensionParser.add_parser(id) do |match|
+      MediaQuery.new(query, 1 + order)
+    end
+  end
+
+  def add_breakpoint_image_variant(id, query, order=0)
+    ExtensionParser.add_parser(id) do |match|
+      MediaQuery.new(query, order)
+    end
+  end
+
+  def add_class_image_variant(id, class_list=[], order=0, &block)
+    parser = if block_given?
+      lambda do |match|
+        result = block.call(match)
+        create_class_rule(result) if result
+      end
+    else
+      lambda do |match|
+        create_class_rule(class_list, order)
+      end
+    end
+
+    ExtensionParser.add_parser(id, &parser)
+  end
+
+  def create_class_rule(class_list, order=0)
+    list = Array(class_list).map {|name| name[0] == '.' ? name : ".#{name}"}
+    ClassList.new(list, order)
+  end
+
+  def clear_image_variants
+    ExtensionParser.parsers.clear
+  end
+
+  def images_dir
+    config = Compass.configuration
+    Pathname.new(config.project_path).join(config.images_dir)
+  end
+
+  def convert_to_sass_value(val)
+    case val
+    when String
+      Sass::Script::String.new(val)
+    when Array
+      converted = val.map {|element| convert_to_sass_value(element) }
+      Sass::Script::List.new(converted, :space)
+    else
+      raise "convert_to_sass_value doesn't understand type #{val.class.inspect}"
+    end
+  end
+end
