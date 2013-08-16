@@ -90,4 +90,8 @@ There are many tools and techniques for using responsive images. What makes Apro
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
+Before any changes are merged to master, we need you to sign a very simple
+[Individual Contributor Agreement](https://spreadsheets.google.com/a/squareup.com/spreadsheet/viewform?formkey=dDViT2xzUHAwRkI3X3k5Z0lQM091OGc6MQ&ndplr=1)
+(Google Form).
+
 © 2013 Square, Inc.
