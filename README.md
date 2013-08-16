@@ -18,30 +18,19 @@ Or install it yourself as:
 
 ## Usage
 
-Apropos depends on [Compass](http://compass-style.org/), so make sure you have that installed and configured in your project first.
+Apropos depends on [Compass](http://compass-style.org/), so make sure you have that installed and configured in your project.
 
-### Configure variants
+### Sample configuration
 
-You can configure what variants will be recognized in your project. There are helpers for configuration in both Ruby and Sass. Here is a sample Ruby configuration that will recognize high-dpi variants and variants for a few breakpoints:
+It's easy to get up and running with Apropos' basic configuration. Here's a sample stylesheet:
 
-    # Put this in your Compass config.rb file or in a Rails initializer
+    // Put this in a .sass (or .scss) file, such as application.css.sass
 
-    dpi_query = '(-webkit-min-device-pixel-ratio: 1.75), (min-resolution: 168dpi)'
-    medium_query = '(min-width: 768px)'
-    large_query = '(min-width: 1024px)'
-
-    Apropos.add_dpi_image_variant('2x', dpi_query)
-    # Last argument is a sort value so that "medium" rules are output before
-    # "large" ones.
-    Apropos.add_breakpoint_image_variant('medium', medium_query, 1)
-    Apropos.add_breakpoint_image_variant('large', large_query, 2)
-
-### Use Apropos in Sass
-
-With the above configuration, you can now use Apropos in your Sass file:
-
-    // Put this in a .sass or .scss file, such as application.css.sass
-    @import apropos
+    // Substitute with your own breakpoint names and sizes
+    $apropos-breakpoints: (medium, 768px), (large, 1024px)
+    @import "apropos"
+    @import "apropos/hidpi"
+    @import "apropos/breakpoints"
 
     .hero
       // Use hero.jpg as the background of this element, and load any image
@@ -51,9 +40,11 @@ With the above configuration, you can now use Apropos in your Sass file:
       // original dimensions).
       +apropos-bg-variants('hero.jpg', $generate-height: true)
 
-### Name image files
+      // Customize other background styles
+      background-size: auto 100%
+      background-position: 50%
 
-With the configuration and Sass set up, you can now include any set of variants on your image with a simple file naming convention:
+With that configuration set up, you can include any set of variants on your image with a simple file naming convention:
 
     # File listing e.g. app/assets/images:
     hero.jpg
@@ -65,12 +56,25 @@ With the configuration and Sass set up, you can now include any set of variants 
 
 In this example, `hero.jpg` would be your base image, most likely a mobile version. `hero.medium.jpg` would be swapped in at the 768px breakpoint, and `hero.large.jpg` would be swapped in at 1024px. On a high-dpi device, `hero.2x.jpg`, `hero.2x.medium.jpg`, and `hero.2x.large.jpg` would be used instead.
 
+### Customization
+
+You can customize Apropos' breakpoints as shown above, and you can also customize the definition of the "high dpi" variant:
+
+    // The default extension name is "2x", we're overriding to use "hidpi"
+    $apropos-hidpi-extension: "hidpi"
+    // The default ratio is 1.75 (or 168 dpi), but here we're overriding that
+    $apropos-hidpi-query: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)"
+    @import "apropos"
+    @import "apropos/hidpi"
+
+If you want to do more advanced configuration like adding variants for localization, you can [customize Apropos in Ruby](doc-src/customization.md).
+
 ## Why use Apropos?
 
 There are many tools and techniques for using responsive images. What makes Apropos different? A few key principles:
 
 - Let the browser do what it does best. CSS rules are more efficient and reliable than a solution that relies on Javascript or setting cookies for each visitor.
-- Avoid duplicate downloads. Almost all Javascript solutions produce unnecessary extra downloads, which CSS classes and media queries avoid.
+- Avoid duplicate downloads. Almost all Javascript solutions, including polyfills for things like `srcset`, require unnecessary extra downloads, which CSS classes and media queries avoid.
 - No server logic should be required. Rather than setting a cookie and serving up different assets based on the cookie, we should be able to push compiled CSS and images to a CDN and rely on the browser to request the right images.
 - Take advantage of the "metadata" encoded in file names. We need to create separate assets for high-dpi devices, breakpoints, locales, etc anyway. We can lean on the filesystem with a simple naming convention rather than hand-coding a bunch of CSS.
 
