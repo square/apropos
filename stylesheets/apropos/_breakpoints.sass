@@ -1,6 +1,6 @@
 $apropos-breakpoints: () !default
 
-$_count: 0
+$_count: 1
 @each $_breakpoint in $apropos-breakpoints
   $_: add_breakpoint_image_variant(nth($_breakpoint, 1), "(min-width: #{nth($_breakpoint, 2)})", $_count)
   $_count: $_count + 1

@@ -100,5 +100,23 @@ describe 'stylesheets' do
       css_file.should include("@media (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1.75), (min-width: 768px) and (min-resolution: 168dpi) { .foo { background-image: url('/hero.medium.2x.jpg'); } }")
       css_file.should include("@media (min-width: 1024px) and (-webkit-min-device-pixel-ratio: 1.75), (min-width: 1024px) and (min-resolution: 168dpi) { .foo { background-image: url('/hero.large.2x.jpg'); } }")
     end
+
+    it "sorts breakpoints vs. retina correctly" do
+      # filesystem sort order
+      files = %w[2x large.2x large medium.2x medium].map {|f| "./hero.#{f}.jpg" }
+      stub_files(*files)
+      @scss_file = %Q{
+        $apropos-breakpoints: (medium, 768px), (large, 1024px);
+        @import "apropos";
+        @import "apropos/hidpi";
+        @import "apropos/breakpoints";
+        .foo {
+          @include apropos-bg-variants('hero.jpg');
+        }
+      }
+      images = css_file.scan(/hero.+jpg/)
+      sorted_images = %w[2x medium medium.2x large large.2x].map {|f| "hero.#{f}.jpg" }
+      images.should == ["hero.jpg"] + sorted_images
+    end
   end
 end
