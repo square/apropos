@@ -61,7 +61,7 @@ describe Apropos do
 
   describe ".image_variant_rules" do
     before :all do
-      Apropos.add_dpi_image_variant('2x', "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)")
+      Apropos.add_dpi_image_variant('2x', "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)", 0.5)
       Apropos.add_breakpoint_image_variant('medium', 'min-width: 768px', 1)
       Apropos.add_breakpoint_image_variant('large', 'min-width: 1024px', 2)
       Apropos::ExtensionParser.add_parser(/^([a-z]{2}(?:-(ca))?)$/) do |match|

@@ -15,7 +15,7 @@ module Apropos
 
   def add_dpi_image_variant(id, query, order=0)
     ExtensionParser.add_parser(id) do |match|
-      MediaQuery.new(query, 1 + order)
+      MediaQuery.new(query, order)
     end
   end
 
