@@ -24,25 +24,27 @@ Apropos depends on [Compass](http://compass-style.org/), so make sure you have t
 
 It's easy to get up and running with Apropos' basic configuration. Here's a sample stylesheet:
 
-    // Put this in a .sass (or .scss) file, such as application.css.sass
+```sass
+// Put this in a .sass (or .scss) file, such as application.css.sass
 
-    // Substitute with your own breakpoint names and sizes
-    $apropos-breakpoints: (medium, 768px), (large, 1024px)
-    @import "apropos"
-    @import "apropos/hidpi"
-    @import "apropos/breakpoints"
+// Substitute with your own breakpoint names and sizes
+$apropos-breakpoints: (medium, 768px), (large, 1024px)
+@import "apropos"
+@import "apropos/hidpi"
+@import "apropos/breakpoints"
 
-    .hero
-      // Use hero.jpg as the background of this element, and load any image
-      // variants that exist. If you use $generate-height: true, the function
-      // will also generate height definitions based on the height of each
-      // image (except dpi variants, since you want to display those at the
-      // original dimensions).
-      +apropos-bg-variants('hero.jpg', $generate-height: true)
+.hero
+  // Use hero.jpg as the background of this element, and load any image
+  // variants that exist. If you use $generate-height: true, the function
+  // will also generate height definitions based on the height of each
+  // image (except dpi variants, since you want to display those at the
+  // original dimensions).
+  +apropos-bg-variants('hero.jpg', $generate-height: true)
 
-      // Customize other background styles
-      background-size: auto 100%
-      background-position: 50%
+  // Customize other background styles
+  background-size: auto 100%
+  background-position: 50%
+```
 
 With that configuration set up, you can include any set of variants on your image with a simple file naming convention:
 
@@ -60,12 +62,14 @@ In this example, `hero.jpg` would be your base image, most likely a mobile versi
 
 You can customize Apropos' breakpoints as shown above, and you can also customize the definition of the "high dpi" variant:
 
-    // The default extension name is "2x", we're overriding to use "hidpi"
-    $apropos-hidpi-extension: "hidpi"
-    // The default ratio is 1.75 (or 168 dpi), but here we're overriding that
-    $apropos-hidpi-query: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)"
-    @import "apropos"
-    @import "apropos/hidpi"
+```sass
+// The default extension name is "2x", we're overriding to use "hidpi"
+$apropos-hidpi-extension: "hidpi"
+// The default ratio is 1.75 (or 168 dpi), but here we're overriding that
+$apropos-hidpi-query: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)"
+@import "apropos"
+@import "apropos/hidpi"
+```
 
 If you want to do more advanced configuration like adding variants for localization, you can [customize Apropos in Ruby](doc-src/customization.md).
 
