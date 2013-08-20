@@ -56,7 +56,7 @@ With that configuration set up, you can include any set of variants on your imag
     hero.2x.medium.jpg
     hero.2x.large.jpg
 
-In this example, `hero.jpg` would be your base image, most likely a mobile version. `hero.medium.jpg` would be swapped in at the 768px breakpoint, and `hero.large.jpg` would be swapped in at 1024px. On a high-dpi device, `hero.2x.jpg`, `hero.2x.medium.jpg`, and `hero.2x.large.jpg` would be used instead.
+In this example, `hero.jpg` would be your base image, most likely a mobile version. `hero.medium.jpg` would be swapped in at the 768px breakpoint, and `hero.large.jpg` would be swapped in at 1024px. On a high-dpi device, `hero.2x.jpg`, `hero.2x.medium.jpg`, and `hero.2x.large.jpg` would be used instead. Note that the order of the file extensions doesn't matter; `hero.2x.medium.jpg` and `hero.medium.2x.jpg` work exactly the same.
 
 ### Customization
 
