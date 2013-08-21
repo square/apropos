@@ -27,7 +27,6 @@ describe 'stylesheets' do
       stub_files("./hero.2x.jpg")
       @scss_file = %Q{
         @import "apropos";
-        @import "apropos/hidpi";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }
@@ -39,10 +38,9 @@ describe 'stylesheets' do
     it "allows customizing hidpi extension and query" do
       stub_files("./hero.hidpi.jpg")
       @scss_file = %Q{
-        @import "apropos";
         $apropos-hidpi-extension: 'hidpi';
         $apropos-hidpi-query: '(min-resolution: 300dpi)';
-        @import "apropos/hidpi";
+        @import "apropos";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }
@@ -61,7 +59,6 @@ describe 'stylesheets' do
     it "doesn't generate any defaults" do
       @scss_file = %Q{
         @import "apropos";
-        @import "apropos/breakpoints";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }
@@ -73,9 +70,8 @@ describe 'stylesheets' do
     it "allows setting breakpoints" do
       stub_files("./hero.medium.jpg", "./hero.large.jpg")
       @scss_file = %Q{
-        @import "apropos";
         $apropos-breakpoints: (medium, 768px), (large, 1024px);
-        @import "apropos/breakpoints";
+        @import "apropos";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }
@@ -91,8 +87,6 @@ describe 'stylesheets' do
       @scss_file = %Q{
         $apropos-breakpoints: (medium, 768px), (large, 1024px);
         @import "apropos";
-        @import "apropos/hidpi";
-        @import "apropos/breakpoints";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }
@@ -108,8 +102,6 @@ describe 'stylesheets' do
       @scss_file = %Q{
         $apropos-breakpoints: (medium, 768px), (large, 1024px);
         @import "apropos";
-        @import "apropos/hidpi";
-        @import "apropos/breakpoints";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }

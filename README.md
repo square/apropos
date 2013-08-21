@@ -30,8 +30,6 @@ It's easy to get up and running with Apropos' basic configuration. Here's a samp
 // Substitute with your own breakpoint names and sizes
 $apropos-breakpoints: (medium, 768px), (large, 1024px)
 @import "apropos"
-@import "apropos/hidpi"
-@import "apropos/breakpoints"
 
 .hero
   // Use hero.jpg as the background of this element, and load any image
@@ -68,7 +66,6 @@ $apropos-hidpi-extension: "hidpi"
 // The default ratio is 1.75 (or 168 dpi), but here we're overriding that
 $apropos-hidpi-query: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)"
 @import "apropos"
-@import "apropos/hidpi"
 ```
 
 If you want to do more advanced configuration like adding variants for localization, you can [customize Apropos in Ruby](doc-src/customization.md).
