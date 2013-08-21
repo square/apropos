@@ -10,11 +10,10 @@ Gem::Specification.new do |spec|
   spec.email         = ["gabriel@squareup.com"]
   spec.description   = %q{Apropos helps your site serve up the appropriate image for every visitor. Serving multiple versions of an image in responsive and/or localized web sites can be a chore, but Apropos simplifies and automates this task. Instead of manually writing a lot of CSS rules to swap different images, Apropos generates CSS for you based on a simple file naming convention.}
   spec.summary       = %q{Apropos helps your site serve up the appropriate image for every visitor.}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.homepage      = "https://github.com/square/apropos"
+  spec.license       = "Apache 2.0"
 
   spec.files         = `git ls-files`.split($/)
-  spec.files        -= Dir.glob('testproject/**/*')
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
