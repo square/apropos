@@ -2,7 +2,7 @@ require_relative "../spec_helper.rb"
 
 describe Apropos do
   def stub_files(*files)
-    Dir.stub(:glob).with(Pathname.new("/project/images/foo.*.jpg")).and_return(files)
+    Apropos::Set.stub(:glob).with(Pathname.new("/project/images/foo.*.jpg")).and_return(files)
   end
 
   let(:rules) { Apropos.image_variant_rules("foo.jpg") }

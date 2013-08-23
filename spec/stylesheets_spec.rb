@@ -9,7 +9,7 @@ describe 'stylesheets' do
   }
 
   def stub_files(*files)
-    Dir.stub(:glob).with(Pathname.new("hero.*.jpg")).and_return(files)
+    Apropos::Set.stub(:glob).with(Pathname.new("hero.*.jpg")).and_return(files)
   end
 
   it "can be imported" do

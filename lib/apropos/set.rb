@@ -19,7 +19,7 @@ module Apropos
 
     def variant_paths
       paths = {}
-      Dir.glob(@basedir.join(variant_path_glob)).each do |path|
+      self.class.glob(@basedir.join(variant_path_glob)).each do |path|
         key = code_fragment(path)
         paths[key] = remove_basedir(path)
       end
@@ -53,6 +53,11 @@ module Apropos
 
     def extname
       @extname ||= File.extname(@path)
+    end
+
+    # Wrapper for Dir.glob to make test stubbing cleaner
+    def self.glob(path)
+      Dir.glob(path)
     end
   end
 end
