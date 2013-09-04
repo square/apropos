@@ -6,6 +6,8 @@ Apropos helps your site serve up the appropriate image for every visitor. Servin
 
 ## Installation
 
+Apropos requires Ruby 1.9 or greater.
+
 Add this line to your application's Gemfile:
 
     gem 'apropos'
