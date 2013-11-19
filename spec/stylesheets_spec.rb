@@ -1,18 +1,29 @@
 require 'spec_helper'
+require 'fileutils'
+require 'tmpdir'
 
 describe 'stylesheets' do
-  let(:import_options) {
-    {style: :compact, load_paths: [Apropos::STYLESHEETS_DIR], syntax: :scss}
-  }
-  let(:css_file) {
-    Sass::Engine.new(@scss_file, import_options).render
+  let(:import_options) { {style: :compact, load_paths: [Apropos::STYLESHEETS_DIR], syntax: :scss} }
+  let(:css_file) { Sass::Engine.new(@scss_file, import_options).render }
+  let(:images_dir) {
+    Dir.mktmpdir('apropos').tap do |dir|
+      at_exit { FileUtils.remove_entry_secure(dir) }
+    end
   }
 
-  def stub_files(*files)
-    Apropos::Set.stub(:glob).with(Pathname.new("hero.*.jpg")).and_return(files)
+  before do
+    Compass.configuration.stub(:images_path).and_return(images_dir)
+    Compass.configuration.stub(:asset_cache_buster).and_return( lambda { |path| nil } )
+  end
+
+  def stub_files(files)
+    FileUtils.cd(images_dir) do
+      FileUtils.touch(files)
+    end
   end
 
   it "can be imported" do
+    stub_files(%w[hero.jpg])
     @scss_file = %Q{
       @import "apropos";
       .foo {
@@ -24,7 +35,7 @@ describe 'stylesheets' do
 
   describe "hidpi stylesheet" do
     it "generates default hidpi rules" do
-      stub_files("./hero.2x.jpg")
+      stub_files(%w[hero.jpg hero.2x.jpg])
       @scss_file = %Q{
         @import "apropos";
         .foo {
@@ -36,7 +47,7 @@ describe 'stylesheets' do
     end
 
     it "allows customizing hidpi extension and query" do
-      stub_files("./hero.hidpi.jpg")
+      stub_files(%w[hero.jpg hero.hidpi.jpg])
       @scss_file = %Q{
         $apropos-hidpi-extension: 'hidpi';
         $apropos-hidpi-query: '(min-resolution: 300dpi)';
@@ -53,7 +64,7 @@ describe 'stylesheets' do
 
   describe "breakpoints stylesheet" do
     before :each do
-      stub_files("./hero.medium.jpg", "./hero.large.jpg")
+      stub_files(%w[hero.jpg hero.medium.jpg hero.large.jpg])
     end
 
     it "doesn't generate any defaults" do
@@ -68,7 +79,7 @@ describe 'stylesheets' do
     end
 
     it "allows setting breakpoints" do
-      stub_files("./hero.medium.jpg", "./hero.large.jpg")
+      stub_files(%w[hero.jpg hero.medium.jpg hero.large.jpg])
       @scss_file = %Q{
         $apropos-breakpoints: (medium, 768px), (large, 1024px);
         @import "apropos";
@@ -83,7 +94,7 @@ describe 'stylesheets' do
 
   describe "breakpoints and hidpi" do
     it "can be combined" do
-      stub_files("./hero.large.2x.jpg", "./hero.medium.2x.jpg")
+      stub_files(%w[hero.jpg hero.large.2x.jpg hero.medium.2x.jpg])
       @scss_file = %Q{
         $apropos-breakpoints: (medium, 768px), (large, 1024px);
         @import "apropos";
@@ -97,8 +108,8 @@ describe 'stylesheets' do
 
     it "sorts breakpoints vs. retina correctly" do
       # filesystem sort order
-      files = %w[2x large.2x large medium.2x medium].map {|f| "./hero.#{f}.jpg" }
-      stub_files(*files)
+      files = %w[2x large.2x large medium.2x medium].map {|f| "hero.#{f}.jpg" } + %w[hero.jpg]
+      stub_files(files)
       @scss_file = %Q{
         $apropos-breakpoints: (medium, 768px), (large, 1024px);
         @import "apropos";
