@@ -16,6 +16,8 @@ describe 'stylesheets' do
     Compass.configuration.stub(:asset_cache_buster).and_return( lambda { |path| nil } )
   end
 
+  after { Apropos.clear_image_variants }
+
   def stub_files(files)
     FileUtils.cd(images_dir) do
       FileUtils.touch(files)
