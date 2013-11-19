@@ -2,20 +2,20 @@ require_relative "../spec_helper.rb"
 
 describe Apropos do
   def stub_files(*files)
-    Apropos::Set.stub(:glob).with(Pathname.new("/project/images/foo.*.jpg")).and_return(files)
+    Apropos::Set.stub(:glob).with(Pathname.new("#{images_dir}/foo.*.jpg")).and_return(files)
   end
 
+  let(:images_dir) { '/project/images' }
+  let(:project_dir) { nil }
   let(:rules) { Apropos.image_variant_rules("foo.jpg") }
 
-  before :each do
-    Compass.configuration.stub(:project_path).and_return('/project')
-    Compass.configuration.stub(:images_dir).and_return('images')
+  before do
+    Compass.configuration.stub(:images_path).and_return(images_dir) if images_dir
+    Compass.configuration.stub(:project_path).and_return(project_dir) if project_dir
   end
 
   describe ".add_class_image_variant" do
-    after :each do
-      Apropos.clear_image_variants
-    end
+    after { Apropos.clear_image_variants }
 
     it "adds a simple class variant" do
       Apropos.add_class_image_variant('alt', 'alternate')
@@ -180,6 +180,19 @@ describe Apropos do
       expect {
         Apropos.convert_to_sass_value(3)
       }.to raise_exception
+    end
+  end
+
+  describe ".images_dir" do
+    context "with images_path defined" do
+      let(:images_dir) { '/path/to/images' }
+      it { Apropos.images_dir.to_s.should == images_dir }
+    end
+
+    context "with images_path undefined" do
+      let(:images_dir) { nil }
+      let(:project_dir) { '/path/to/project' }
+      it { Apropos.images_dir.to_s.should == project_dir }
     end
   end
 end

@@ -51,7 +51,7 @@ module Apropos
 
   def images_dir
     config = Compass.configuration
-    Pathname.new(config.project_path).join(config.images_dir || '')
+    Pathname.new(config.images_path || config.project_path)
   end
 
   def convert_to_sass_value(val)
