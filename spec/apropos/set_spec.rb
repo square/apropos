@@ -1,9 +1,7 @@
 require_relative "../spec_helper.rb"
 
 describe Apropos::Set do
-  def subject
-    @subject ||= described_class.new("foo.jpg", "/dir")
-  end
+  subject { described_class.new("foo.jpg", "/dir") }
 
   it "detects paths with indicators before the base file extension" do
     subject.variant_path_glob.should == Pathname.new("foo.*.jpg")

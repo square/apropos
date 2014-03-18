@@ -12,11 +12,12 @@ describe Apropos do
   before do
     Compass.configuration.stub(:images_path).and_return(images_dir) if images_dir
     Compass.configuration.stub(:project_path).and_return(project_dir) if project_dir
+    Apropos.clear_image_variants
   end
 
-  describe ".add_class_image_variant" do
-    after { Apropos.clear_image_variants }
+  after { Apropos.clear_image_variants }
 
+  describe ".add_class_image_variant" do
     it "adds a simple class variant" do
       Apropos.add_class_image_variant('alt', 'alternate')
       stub_files("/foo.alt.jpg")
@@ -60,7 +61,7 @@ describe Apropos do
   end
 
   describe ".image_variant_rules" do
-    before :all do
+    before do
       Apropos.add_dpi_image_variant('2x', "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)", 0.5)
       Apropos.add_breakpoint_image_variant('medium', 'min-width: 768px', 1)
       Apropos.add_breakpoint_image_variant('large', 'min-width: 1024px', 2)
@@ -77,10 +78,6 @@ describe Apropos do
           nil
         end
       end
-    end
-
-    after :all do
-      Apropos.clear_image_variants
     end
 
     it "ignores invalid variants" do

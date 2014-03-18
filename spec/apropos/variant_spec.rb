@@ -12,6 +12,8 @@ describe Apropos::Variant do
   end
 
   before :all do
+    Apropos::ExtensionParser.parsers.clear
+
     Apropos::ExtensionParser.add_parser('2x') do |match|
       dpi_selector
     end

@@ -1,9 +1,9 @@
 require_relative "../spec_helper.rb"
 
 describe Apropos::ExtensionParser do
-  before :each do
-    described_class.parsers.clear
-  end
+  before { described_class.parsers.clear }
+
+  after { described_class.parsers.clear }
 
   describe ".parsers" do
     it "keeps track of variant parsers" do
@@ -16,7 +16,7 @@ describe Apropos::ExtensionParser do
 
   describe ".add_parser" do
     it "overrides previously defined parsers with the same extension" do
-      old_parser = described_class.add_parser('2x')
+      described_class.add_parser('2x')
       new_parser = described_class.add_parser('2x')
       described_class.parsers['2x'].should == new_parser
     end
