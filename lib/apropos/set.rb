@@ -17,6 +17,18 @@ module Apropos
       end.sort
     end
 
+    def valid_variants
+      variants.select(&:valid?)
+    end
+
+    def invalid_variants
+      variants.reject(&:valid?)
+    end
+
+    def valid_variant_rules
+      valid_variants.map(&:rule)
+    end
+
     def variant_paths
       paths = {}
       self.class.glob(@basedir.join(variant_path_glob)).each do |path|

@@ -27,8 +27,14 @@ module Apropos
 
     def image_variants(path)
       assert_type path, :String
-      out = ::Apropos.image_variant_rules(path.value)
-      ::Apropos.convert_to_sass_value(out)
+      set = ::Apropos.image_set(path.value)
+      set.invalid_variants.each do |variant|
+        message = "Ignoring unknown extensions " +
+          "'#{variant.invalid_codes.join("', '")}' (#{variant.path})"
+        Sass.logger.info message
+        $stderr.puts message
+      end
+      ::Apropos.convert_to_sass_value(set.valid_variant_rules)
     end
 
     def add_dpi_image_variant(id, query, sort=0)

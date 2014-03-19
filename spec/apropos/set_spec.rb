@@ -29,4 +29,9 @@ describe Apropos::Set do
     set = described_class.new("foo.jpg", "/foo/bar")
     set.remove_basedir("/Users/bob/foo/bar/foo.fr.jpg").should == "foo.fr.jpg"
   end
+
+  it "detects valid variants" do
+    subject.should_receive(:variants).and_return([double(valid?: false), double(valid?: true)])
+    subject.valid_variants.length.should == 1
+  end
 end

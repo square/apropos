@@ -14,6 +14,7 @@ module Apropos
     def initialize(code_fragment, path)
       @code_fragment = code_fragment
       @path = path
+      @_invalid_codes = []
     end
 
     def codes
@@ -21,12 +22,11 @@ module Apropos
     end
 
     def conditions
-      @_conditions ||= codes.map do |code|
-        ExtensionParser.each_parser.inject(nil) do |_, parser|
-          query_or_selector = parser.match(code)
-          break query_or_selector if query_or_selector
-        end
-      end.compact
+      parse_codes && @_conditions
+    end
+
+    def invalid_codes
+      parse_codes && @_invalid_codes
     end
 
     def conditions_by_type
@@ -42,7 +42,7 @@ module Apropos
     end
 
     def valid?
-      !conditions.empty?
+      !conditions.empty? && @_invalid_codes.empty?
     end
 
     def rule
@@ -62,6 +62,19 @@ module Apropos
 
     def <=>(other)
       aggregate_sort_value <=> other.aggregate_sort_value
+    end
+
+    private
+    def parse_codes
+      @_conditions ||= codes.map do |code|
+        ExtensionParser.each_parser.inject(nil) do |_, parser|
+          query_or_selector = parser.match(code)
+          break query_or_selector if query_or_selector
+        end.tap do |match|
+          # Track codes not recognized by any parser
+          @_invalid_codes << code unless match
+        end
+      end.compact
     end
   end
 end

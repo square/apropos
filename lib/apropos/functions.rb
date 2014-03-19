@@ -6,11 +6,12 @@
 module Apropos
   module_function
 
+  def image_set(path)
+    Set.new(path, images_dir)
+  end
+
   def image_variant_rules(path)
-    set = Set.new(path, images_dir)
-    set.variants.select(&:valid?).map do |variant|
-      variant.rule
-    end
+    image_set(path).valid_variants.map(&:rule)
   end
 
   def add_dpi_image_variant(id, query, order=0)

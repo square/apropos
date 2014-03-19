@@ -124,4 +124,28 @@ describe 'stylesheets' do
       images.should == ["hero.jpg"] + sorted_images
     end
   end
+
+  describe "invalid variants" do
+    let(:log) { '' }
+
+    before :each do
+      stub_files(%w[hero.jpg hero.foo.jpg hero.bar.jpg])
+      Sass.logger.stub(:info) do |message|
+        log << message << "\n"
+      end
+    end
+
+    it "logs invalid variants during compilation" do
+      @scss_file = %Q{
+        @import "apropos";
+        .foo {
+          @include apropos-bg-variants('hero.jpg');
+        }
+      }
+      css_file.should_not include('/hero.foo.jpg')
+      css_file.should_not include('/hero.bar.jpg')
+      log.should include("unknown extensions 'foo'")
+      log.should include("unknown extensions 'bar'")
+    end
+  end
 end

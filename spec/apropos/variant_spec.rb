@@ -42,6 +42,7 @@ describe Apropos::Variant do
     v = variant("1x")
     v.conditions.should == []
     v.should_not be_valid
+    v.invalid_codes.should == %w[1x]
     v2 = variant("2x")
     v2.should be_valid
   end
