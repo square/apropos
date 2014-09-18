@@ -12,7 +12,8 @@ describe 'stylesheets' do
   }
 
   before do
-    Compass.configuration.stub(:images_path).and_return(images_dir)
+    Compass.configuration.stub(:http_images_path) { '/' }
+    Compass.configuration.stub(:images_path) { images_dir }
     Compass.configuration.stub(:asset_cache_buster).and_return( lambda { |path| nil } )
   end
 

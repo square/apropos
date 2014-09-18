@@ -10,6 +10,7 @@ describe Apropos do
   let(:rules) { Apropos.image_variant_rules("foo.jpg") }
 
   before do
+    Compass.configuration.stub(:http_images_path) { '/' }
     Compass.configuration.stub(:images_path).and_return(images_dir) if images_dir
     Compass.configuration.stub(:project_path).and_return(project_dir) if project_dir
     Apropos.clear_image_variants
@@ -189,7 +190,14 @@ describe Apropos do
     context "with images_path undefined" do
       let(:images_dir) { nil }
       let(:project_dir) { '/path/to/project' }
-      it { Apropos.images_dir.to_s.should == project_dir }
+      it 'uses the Compass default' do
+        expected = if Compass.configuration.respond_to?(:default_images_dir)
+          File.join(project_dir, Compass.configuration.default_images_dir)
+        else
+          project_dir
+        end
+        Apropos.images_dir.to_s.should == expected
+      end
     end
   end
 end
