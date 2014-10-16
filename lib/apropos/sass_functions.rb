@@ -16,9 +16,7 @@ module Apropos
       ::Sass::Script::Functions.declare :add_dpi_image_variant, []
       ::Sass::Script::Functions.declare :add_breakpoint_image_variant, []
       ::Sass::Script::Functions.declare :nth_polyfill, [:list, :index]
-      unless sass_function_exist? :str_index
-        ::Sass::Script::Functions.declare :str_index, [:string, :substring]
-      end
+      ::Sass::Script::Functions.declare :str_contains, [:string, :substring]
     end
 
     def self.value(val)
@@ -58,18 +56,10 @@ module Apropos
       list[index - 1]
     end
 
-    # Polyfill for `str-index` function from master branch of Sass.
-    # Implementation taken from:
-    # https://github.com/nex3/sass/blob/master/lib/sass/script/functions.rb
-    # Using Sass::Script::Number rather than Sass::Script::Value::Number for
-    # backwards compatibility, however.
-    unless sass_function_exist? :str_index
-      def str_index(string, substring)
-        assert_type string, :String, :string
-        assert_type substring, :String, :substring
-        index = string.value.index(substring.value) || -1
-        ::Sass::Script::Number.new(index + 1)
-      end
+    def str_contains(string, substring)
+      assert_type string, :String, :string
+      assert_type substring, :String, :substring
+      ::Sass::Script::Bool.new(string.value.include?(substring.value))
     end
   end
 end
