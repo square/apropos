@@ -36,6 +36,22 @@ describe 'stylesheets' do
     css_file.strip.should == ".foo { background-image: url('/hero.jpg'); }"
   end
 
+  context "with fixture images" do
+    before do
+      Compass.configuration.stub(:images_path) { File.expand_path('fixtures/images', File.dirname(__FILE__)) }
+    end
+
+    it "can generate heights" do
+      @scss_file = %Q{
+        @import "apropos";
+        .foo {
+          @include apropos-bg-variants('kitten.jpg', true);
+        }
+      }
+      css_file.strip.should == ".foo { background-image: url('/kitten.jpg'); height: 286px; }"
+    end
+  end
+
   describe "hidpi stylesheet" do
     it "generates default hidpi rules" do
       stub_files(%w[hero.jpg hero.2x.jpg])
