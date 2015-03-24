@@ -74,6 +74,15 @@ $apropos-hidpi-query: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192
 
 If you want to do more advanced configuration like adding variants for localization, you can [customize Apropos in Ruby](doc-src/customization.md).
 
+### Hidpi Only mode
+
+For some projects, it makes sense to only use high dpi images. If most of your visitors use high dpi devices, you can use fewer images and omit 1x assets. In fact, even for 1x devices you may be able to use higher compression rates on 2x assets that are scaled down. This also means your generated CSS only needs roughly half as many media queries. You can switch Apropos into "high dpi only" mode, where it will generate CSS definitions with halved heights and not output high dpi media queries, with the following config line:
+
+```ruby
+# Place this in a Ruby configuration file, e.g. Compass config or Rails initializer
+Apropos.hidpi_only = true
+```
+
 ## Why use Apropos?
 
 There are many tools and techniques for using responsive images. What makes Apropos different? A few key principles:

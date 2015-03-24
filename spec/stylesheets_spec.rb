@@ -180,4 +180,66 @@ describe 'stylesheets' do
       log.should include("unknown extensions 'bar'")
     end
   end
+
+  context "hidpi-only mode" do
+    let(:images_path) { File.expand_path('fixtures/images', File.dirname(__FILE__)) }
+
+    before do
+      Apropos.hidpi_only = true
+      Compass.configuration.stub(:images_path) { images_path }
+    end
+
+    after do
+      Apropos.hidpi_only = false
+    end
+
+    it "generates halved heights" do
+      @scss_file = %Q{
+        @import "apropos/core";
+        .foo {
+          @include apropos-bg-variants('kitten.jpg', true);
+        }
+      }
+      css_file.strip.should == ".foo { background-image: url('/kitten.jpg'); height: 143px; }"
+    end
+
+    context "with dpi variant images" do
+      let(:log) { '' }
+      let(:images_path) { images_dir }
+
+      before do
+        Sass.logger.stub(:warn) do |message|
+          log << message << "\n"
+        end
+      end
+
+      it "outputs a warning" do
+        stub_files(%w[hero.jpg hero.2x.jpg])
+        @scss_file = %Q{
+          @import "apropos";
+          .foo {
+            @include apropos-bg-variants('hero.jpg');
+          }
+        }
+        css_file
+        log.should include("DPI variant images detected in hidpi-only mode!")
+      end
+    end
+
+    context "with breakpoints" do
+      it "generates media queries and halved heights" do
+        @scss_file = %Q{
+        $apropos-breakpoints: (medium, 768px), (large, 1024px);
+        @import "apropos/core";
+        @import "apropos/breakpoints";
+        .foo {
+          @include apropos-bg-variants('cat.jpg', true);
+        }
+        }
+        css_file.should include(".foo { background-image: url('/cat.jpg'); height: 150px; }")
+        css_file.should include("@media (min-width: 768px) { .foo { background-image: url('/cat.medium.jpg'); height: 225px; } }")
+        css_file.should include("@media (min-width: 1024px) { .foo { background-image: url('/cat.large.jpg'); height: 300px; } }")
+      end
+    end
+  end
 end

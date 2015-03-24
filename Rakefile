@@ -11,6 +11,7 @@ begin
   desc "Run cane to check quality metrics"
   Cane::RakeTask.new(:quality) do |cane|
     cane.abc_max = 12
+    cane.style_measure = 82
     cane.style_glob = 'lib/**/*.rb'
   end
 
