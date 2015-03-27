@@ -21,7 +21,7 @@ module Apropos
     attr_reader :pattern
 
     def initialize(pattern, &block)
-      @pattern = pattern
+      @pattern = generate_pattern(pattern)
       @match_block = block
     end
 
@@ -29,6 +29,17 @@ module Apropos
       matchdata = pattern.match(extension)
       if matchdata
         @match_block.call(matchdata)
+      end
+    end
+
+    private
+
+    def generate_pattern(pattern)
+      case pattern
+      when String
+        %r(^#{Regexp.escape(pattern)}$)
+      else
+        pattern
       end
     end
   end
