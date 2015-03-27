@@ -31,41 +31,60 @@ describe Apropos::ExtensionParser do
       described_class.each_parser do |parser|
         vals << parser.pattern
       end
-      vals.should == %w[2x medium fr]
+      vals.should == [
+        /^2x$/,
+        /^medium$/,
+        /^fr$/,
+      ]
     end
   end
 
   describe "#match" do
     let(:locale_pattern) { /^([a-z]{2})$/ }
 
-    it "calls the block when the extension matches" do
-      lastmatch = nil
-      parser = described_class.new(locale_pattern) do |match|
-        lastmatch = match
+    context "with a string pattern" do
+      let(:pattern) { 'extra-small' }
+      let(:parser) { described_class.new(pattern) { |_| true } }
+
+      it "matches the exact string" do
+        parser.match(pattern).should == true
       end
-      parser.match('fr')
-      lastmatch[1].should == 'fr'
+
+      it "does not match a substring" do
+        parser.match('small').should be_nil
+      end
     end
 
-    it "doesn't call the block when there is no match" do
-      expect {
-        parser = described_class.new(/^fr$/) do |match|
-          raise
+    context "with a regular expression pattern" do
+      it "calls the block when the extension matches" do
+        lastmatch = nil
+        parser = described_class.new(locale_pattern) do |match|
+          lastmatch = match
         end
+        parser.match('fr')
+        lastmatch[1].should == 'fr'
+      end
+
+      it "doesn't call the block when there is no match" do
+        expect {
+          parser = described_class.new(/^fr$/) do |match|
+            raise
+          end
+          parser.match('en').should be_nil
+        }.to_not raise_error
+      end
+
+      it "allows the block to return a nil value" do
+        parser = described_class.new(locale_pattern) do |match|
+          if match[1] == 'fr'
+            true
+          else
+            nil
+          end
+        end
+        parser.match('fr').should == true
         parser.match('en').should be_nil
-      }.to_not raise_error
-    end
-
-    it "allows the block to return a nil value" do
-      parser = described_class.new(locale_pattern) do |match|
-        if match[1] == 'fr'
-          true
-        else
-          nil
-        end
       end
-      parser.match('fr').should == true
-      parser.match('en').should be_nil
     end
   end
 end

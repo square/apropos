@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 (2015-03-27)
+
+Bug fix where extension variants would match substrings (e.g. "extra-small"
+would accidentally match "small" in a file name).
+
 ## 0.1.3 (2014-10-16)
 
 Bug fix for compatiblity with Sass 3.3.

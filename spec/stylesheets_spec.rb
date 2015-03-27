@@ -98,16 +98,20 @@ describe 'stylesheets' do
     end
 
     it "allows setting breakpoints" do
-      stub_files(%w[hero.jpg hero.medium.jpg hero.large.jpg])
+      stub_files(%w[hero.jpg hero.extra-small.jpg hero.small.jpg hero.medium.jpg hero.large.jpg hero.extra-large.jpg])
       @scss_file = %Q{
-        $apropos-breakpoints: (medium, 768px), (large, 1024px);
+        $apropos-breakpoints: ("extra-small", 374px), ("small", 480px), ("medium", 768px), ("large", 1024px), ("extra-large", 1292px);
         @import "apropos";
         .foo {
           @include apropos-bg-variants('hero.jpg');
         }
       }
+      css_file.should include(".foo { background-image: url('/hero.jpg'); }")
+      css_file.should include("@media (min-width: 374px) { .foo { background-image: url('/hero.extra-small.jpg'); } }")
+      css_file.should include("@media (min-width: 480px) { .foo { background-image: url('/hero.small.jpg'); } }")
       css_file.should include("@media (min-width: 768px) { .foo { background-image: url('/hero.medium.jpg'); } }")
       css_file.should include("@media (min-width: 1024px) { .foo { background-image: url('/hero.large.jpg'); } }")
+      css_file.should include("@media (min-width: 1292px) { .foo { background-image: url('/hero.extra-large.jpg'); } }")
     end
   end
 
