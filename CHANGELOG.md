@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 (2015-10-06)
+
+Bug fix where class variant did not support generating height value
+
 ## 0.1.4 (2015-03-27)
 
 Bug fix where extension variants would match substrings (e.g. "extra-small"

@@ -22,7 +22,7 @@
         +apropos-bg-image-with-height($_path, $generate-height, $_query)
     @else if $_type == class
       #{nest($_class, "&")}
-        background-image: image-url($_path)
+        +apropos-bg-image-with-height($_path, $generate-height)
 
 // apropos-bg-image-with-height generates a background-image property and
 // optionally generates a height property calculated from the image, if the
