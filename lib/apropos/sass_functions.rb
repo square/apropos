@@ -13,6 +13,7 @@ module Apropos
 
     def self.included(mod)
       ::Sass::Script::Functions.declare :image_variants, []
+      ::Sass::Script::Functions.declare :apropos_image_width, [:string]
       ::Sass::Script::Functions.declare :apropos_image_height, [:string]
       ::Sass::Script::Functions.declare :add_dpi_image_variant, []
       ::Sass::Script::Functions.declare :add_breakpoint_image_variant, []
@@ -34,6 +35,20 @@ module Apropos
         $stderr.puts message
       end
       ::Apropos.convert_to_sass_value(set.valid_variant_rules)
+    end
+
+    def apropos_image_width(path)
+      assert_type path, :String
+      width = image_width(path)
+      if ::Apropos.hidpi_only
+        ::Sass::Script::Number.new(
+          (width.value / 2).floor,
+          width.numerator_units,
+          width.denominator_units
+        )
+      else
+        width
+      end
     end
 
     def apropos_image_height(path)

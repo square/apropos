@@ -193,6 +193,16 @@ describe 'stylesheets' do
       Apropos.hidpi_only = false
     end
 
+    it "generates halved widths" do
+      @scss_file = %Q{
+        @import "apropos/core";
+        .foo {
+          width: apropos-image-width('kitten.jpg');
+        }
+      }
+      css_file.strip.should == ".foo { width: 100px; }"
+    end
+
     it "generates halved heights" do
       @scss_file = %Q{
         @import "apropos/core";
