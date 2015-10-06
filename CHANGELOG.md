@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.1.5 (2015-10-06)
+## 0.2.0 (2015-10-06)
 
-Bug fix where class variant did not support generating height value
+- Add "hidpi only" mode to default to 2x images, scaled appropriately.
+- Bug fix where class variant did not support generating height value
 
 ## 0.1.4 (2015-03-27)
 

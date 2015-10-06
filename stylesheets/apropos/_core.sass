@@ -37,4 +37,4 @@
 =apropos-bg-image-with-height($path, $generate-height, $query: "")
   background-image: image-url($path)
   @if $generate-height and not (str-contains($query, "dpi") or str-contains($query, "pixel-ratio"))
-    height: image-height($path)
+    height: apropos-image-height($path)

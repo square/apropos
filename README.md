@@ -24,6 +24,15 @@ Or install it yourself as:
 
 Apropos depends on [Compass](http://compass-style.org/), so make sure you have that installed and configured in your project.
 
+## Why use Apropos?
+
+There are many tools and techniques for using responsive images. What makes Apropos different? A few key principles:
+
+- Let the browser do what it does best. CSS rules are more efficient and reliable than a solution that relies on Javascript or setting cookies for each visitor.
+- Avoid duplicate downloads. Almost all Javascript solutions, including polyfills for things like `srcset`, require unnecessary extra downloads, which CSS classes and media queries avoid.
+- No server logic should be required. Rather than setting a cookie and serving up different assets based on the cookie, we should be able to push compiled CSS and images to a CDN and rely on the browser to request the right images.
+- Take advantage of the "metadata" encoded in file names. We need to create separate assets for high-dpi devices, breakpoints, locales, etc anyway. We can lean on the filesystem with a simple naming convention rather than hand-coding a bunch of CSS.
+
 ### Sample configuration
 
 It's easy to get up and running with Apropos' basic configuration. Here's a sample stylesheet:
@@ -74,14 +83,14 @@ $apropos-hidpi-query: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192
 
 If you want to do more advanced configuration like adding variants for localization, you can [customize Apropos in Ruby](doc-src/customization.md).
 
-## Why use Apropos?
+### Hidpi Only mode
 
-There are many tools and techniques for using responsive images. What makes Apropos different? A few key principles:
+For some projects, it makes sense to only use high dpi images. If most of your visitors use high dpi devices, you can use fewer images and omit 1x assets. In fact, even for 1x devices you may be able to use higher compression rates on 2x assets that are scaled down. This also means your generated CSS only needs roughly half as many media queries. You can switch Apropos into "high dpi only" mode, where it will generate CSS definitions with halved heights and not output high dpi media queries, with the following config line:
 
-- Let the browser do what it does best. CSS rules are more efficient and reliable than a solution that relies on Javascript or setting cookies for each visitor.
-- Avoid duplicate downloads. Almost all Javascript solutions, including polyfills for things like `srcset`, require unnecessary extra downloads, which CSS classes and media queries avoid.
-- No server logic should be required. Rather than setting a cookie and serving up different assets based on the cookie, we should be able to push compiled CSS and images to a CDN and rely on the browser to request the right images.
-- Take advantage of the "metadata" encoded in file names. We need to create separate assets for high-dpi devices, breakpoints, locales, etc anyway. We can lean on the filesystem with a simple naming convention rather than hand-coding a bunch of CSS.
+```ruby
+# Place this in a Ruby configuration file, e.g. Compass config or Rails initializer
+Apropos.hidpi_only = true
+```
 
 ## Contributing
 
