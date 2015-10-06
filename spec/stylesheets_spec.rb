@@ -50,6 +50,17 @@ describe 'stylesheets' do
       }
       css_file.strip.should == ".foo { background-image: url('/kitten.jpg'); height: 286px; }"
     end
+
+    it "class variants can generate heights" do
+      Apropos.add_class_image_variant('variant', %w(variant))
+      @scss_file = %Q{
+        @import "apropos";
+        .foo {
+          @include apropos-bg-variants('kitten.jpg', true);
+        }
+      }
+      css_file.strip.should include(".variant .foo { background-image: url('/kitten.variant.jpg'); height: 386px; }")
+    end
   end
 
   describe "hidpi stylesheet" do
